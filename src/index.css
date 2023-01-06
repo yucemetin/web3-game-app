@@ -12,4 +12,29 @@
         background: radial-gradient(rgba(211, 37, 199, 0.3), rgba(0, 0, 0, 0.3));
         background: linear-gradient(to right, rgba(211, 37, 199, 1),rgba(46, 103, 220, 1));
     }
+
+    .logo {
+      -webkit-text-stroke: 1px white;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .font-outline-2 {
+        -webkit-text-stroke: 2px white;
+        animation: MoveUpDown 10s linear infinite;
+        position: absolute;
+    }
+
+    .font-outline {
+        animation: MoveUpDown 10s linear infinite;
+        position: absolute;
+    }
+
+    @keyframes MoveUpDown {
+        0%, 100% {
+          bottom: 0;
+        }
+        50% {
+          bottom: 100px;
+        }
+      }
 }
