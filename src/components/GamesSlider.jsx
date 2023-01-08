@@ -67,23 +67,23 @@ export default function GamesSlider() {
         <div className='w-full z-10 block'>
             <Slider className='flex gap-x-5' {...settings}>
                 <div className={'w-[300px] h-[500px] relative '}>
-                    <img src="/vader.jpg" alt="" className={active === 0 ? 'cover w-[250px] h-[350px] opacity-75 transition-all duration-500 rounded-md absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2' : `w-[150px] h-[200px] opacity-75 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transition-all duration-1000 rounded-md origin-bottom ${index0}`} />
+                    <img src="/vader.jpg" alt="" className={active === 0 ? 'object-cover w-[250px] h-[350px] opacity-75 transition-all duration-500 rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2' : `w-[150px] h-[200px] opacity-75 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transition-all duration-1000 rounded-lg origin-bottom ${index0} object-cover`} />
                     <p>asdasd</p>
                 </div>
                 <div className={'w-[300px] h-[500px] relative'}>
-                    <img src="/monkey.webp" alt="" className={active === 1 ? 'cover w-[250px] h-[350px] opacity-75 transition-all duration-500  rounded-md absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2' : `w-[150px] h-[200px] opacity-75 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transition-all duration-1000 rounded-md origin-bottom ${index1}`} />
+                    <img src="/monkey.webp" alt="" className={active === 1 ? 'object-cover w-[250px] h-[350px] opacity-75 transition-all duration-500  rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2' : `w-[150px] h-[200px] opacity-75 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transition-all duration-1000 rounded-xl origin-bottom ${index1} object-cover`} />
                     <p>asdasd</p>
                 </div>
                 <div className={'w-[300px] h-[500px] relative'}>
-                    <img src="/monkey1.webp" alt="" className={active === 2 ? 'cover w-[250px] h-[350px] opacity-75 transition-all duration-500 rounded-md absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2' : `w-[150px] h-[200px] opacity-75 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transition-all duration-1000 rounded-md origin-bottom ${index2}`} />
+                    <img src="/monkey1.webp" alt="" className={active === 2 ? 'object-cover w-[250px] h-[350px] opacity-75 transition-all duration-500 rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2' : `w-[150px] h-[200px] opacity-75 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transition-all duration-1000 rounded-xl origin-bottom ${index2} object-cover`} />
                     <p>asdasd</p>
                 </div>
                 <div className={'w-[300px] h-[500px] relative'}>
-                    <img src="/monkey2.jpeg" alt="" className={active === 3 ? 'cover w-[250px] h-[350px] opacity-75 transition-all duration-500 rounded-md absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2' : `w-[150px] h-[200px] opacity-75 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transition-all duration-1000 rounded-md origin-bottom ${index3}`} />
+                    <img src="/monkey2.jpeg" alt="" className={active === 3 ? 'object-cover w-[250px] h-[350px] opacity-75 transition-all duration-500 rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2' : `w-[150px] h-[200px] opacity-75 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transition-all duration-1000 rounded-xl origin-bottom ${index3} object-cover`} />
                     <p>asdasd</p>
                 </div>
                 <div className={'w-[300px] h-[500px] relative'}>
-                    <img src="/monkey3.avif" alt="" className={active === 4 ? 'cover w-[250px] h-[350px] opacity-75 transition-all duration-500 rounded-md absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2' : `w-[150px] h-[200px] opacity-75 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transition-all duration-1000 rounded-md origin-bottom ${index4}`} />
+                    <img src="/monkey3.avif" alt="" className={active === 4 ? 'object-cover w-[250px] h-[350px] opacity-75 transition-all duration-500 rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2' : `w-[150px] h-[200px] opacity-75 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transition-all duration-1000 rounded-xl origin-bottom ${index4} object-cover`} />
                     <p>asdasd</p>
                 </div>
             </Slider>
