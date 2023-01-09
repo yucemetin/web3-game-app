@@ -82,7 +82,7 @@ export default function Navbar() {
                             <li>
                                 <ReactFlagsSelect
                                     countries={["US", "TR"]}
-                                    selected={localStorage.getItem("lang").toUpperCase() === null ? 'TR' : localStorage.getItem("lang").toUpperCase()}
+                                    selected={localStorage?.getItem("lang")?.toUpperCase() ?? 'TR'}
                                     customLabels={{ US: "EN", TR: "TR" }}
                                     onSelect={code => handleChange(code)}
                                     className="border-none"

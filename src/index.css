@@ -4,6 +4,7 @@
 
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css");
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Bubbles&display=swap');
 
 @layer base {
     html, body, #root ,.home{
@@ -39,6 +40,10 @@
     #rfs-btn {
       border: thin solid #C2C5CE !important;
       color: white;
+    }
+
+    .boxes {
+      font-family: 'Rubik Bubbles', cursive;
     }
 
     .games {
