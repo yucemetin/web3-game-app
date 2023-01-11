@@ -5,13 +5,14 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css");
 @import url('https://fonts.googleapis.com/css2?family=Rubik+Bubbles&display=swap');
+@import url('bootstrap/dist/css/bootstrap.min.css');
 
 @layer base {
-    html, body, #root ,.home{
-        @apply h-full;
-        background: radial-gradient(rgba(46, 103, 220, 0.1), rgba(0, 0, 0, 0.1));
-        background: radial-gradient(rgba(211, 37, 199, 0.3), rgba(0, 0, 0, 0.3));
-        background: linear-gradient(to right, rgba(211, 37, 199, 1),rgba(46, 103, 220, 1));
+    html, body, #root, .home{
+
+        transition-property: all;
+        transition-duration: .5s;
+        transition-timing-function: ease-out;
     }
 
     .logo-white {
@@ -49,11 +50,16 @@
     .games {
       border-image-source: linear-gradient(to left top, #ff00ee, #4000ff);
       border-image-slice: 1;
-      border-radius: 18px;
-     
-      -webkit-mask: /*4*/
-         linear-gradient(#fff 0 0);
+      box-shadow: 2px 2px 15px -5px rgba(255,255,255,0.75);
+    }
 
+    .games:hover {
+      scale: 1.06;
+      box-shadow: 10px 10px 35px 10px rgba(255,255,255,0.75);
+    }
+
+    .about {
+      box-shadow: 5px 10px 57px 6px rgba(0,0,0,0.75);
     }
 
     @keyframes MoveUpDown {

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import Slider from "react-slick";
 
-export default function GamesSlider() {
+export default function GamesSlider({slidesToShow}) {
 
     const settings = {
         className: "center flex gap-x-4",
         centerMode: true,
         infinite: true,
         centerPadding: "60px",
-        slidesToShow: 3,
+        slidesToShow: slidesToShow,
         speed: 500,
         initialSlide: 0,
         autoplay: true,
@@ -65,7 +65,7 @@ export default function GamesSlider() {
 
     return (
         <div className='w-full z-10 block'>
-            <Slider className='flex gap-x-5' {...settings}>
+            <Slider className='flex gap-x-7 xsma:gap-x-5' {...settings}>
                 <div className={'w-[300px] h-[500px] relative '}>
                     <img src="/vader.jpg" alt="" className={active === 0 ? 'object-cover w-[250px] h-[350px] opacity-75 transition-all duration-500 rounded-xl absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2' : `w-[150px] h-[200px] opacity-75 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 transition-all duration-1000 rounded-lg origin-bottom ${index0} object-cover`} />
                     <p>asdasd</p>

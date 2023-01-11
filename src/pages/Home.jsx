@@ -1,11 +1,14 @@
 import GamesSlider from '../components/GamesSlider'
-import { useTranslation } from 'react-i18next'
 import gsap from "gsap"
-import React, { useEffect, useRef } from 'react'
+import { useSelector } from "react-redux"
+import React, { useEffect, useRef, useState } from 'react'
+import languages from "../language.json"
 
 export default function Home() {
 
-  const { t } = useTranslation();
+
+  const { currentLanguage } = useSelector(state => state.animation)
+  const [slidesToShow, setSlidesToShow] = useState(3)
 
   const timeline = gsap.timeline({
     repeat: false,
@@ -20,12 +23,31 @@ export default function Home() {
     // eslint-disable-next-line
   }, [])
 
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth < 960) {
+      setSlidesToShow(1)
+    }
+    if (window.innerWidth > 960) {
+      setSlidesToShow(3)
+    }
+  })
+
+  useEffect(() => {
+    if (window.innerWidth < 960) {
+      setSlidesToShow(1)
+    }
+    if (window.innerWidth > 960) {
+      setSlidesToShow(3)
+    }
+  }, [])
+
   return (
-    <div ref={r1} className={`flex flex-col gap-y-10 items-center justify-center h-full home relative`}>
-      <GamesSlider />
-      <button className='border-[0.5px] border-white text-2xl font-extrabold text-white rounded-2xl bg-gradient-to-tr from-[#2E67DC] to-[#D325C7] hover:border-none hover:scale-[1.1] transition-all duration-600 px-6 py-3'>{t('home-button')}</button>
-      <h1 className='absolute top-1/2 -translate-y-1/2 font-extrabold text-[180px] break-all font-outline-2 text-black opacity-40'>THIRD GAME</h1>
-      <h1 className='absolute bottom-1/2 -translate-y-1/2 font-extrabold text-[180px] break-all text-white opacity-40 font-outline'>THIRD GAME</h1>
+    <div ref={r1} className={`flex flex-col gap-y-6 items-center justify-center h-full home relative`}>
+      <GamesSlider slidesToShow={slidesToShow} />
+      <button className='border-[0.5px] border-white text-2xl font-extrabold text-white rounded-2xl bg-gradient-to-tr from-[#2E67DC] to-[#D325C7] hover:border-none hover:scale-[1.1] transition-all duration-600 px-6 py-2'>{languages[currentLanguage][0].homeButton}</button>
+      <h1 className='absolute top-1/2 -translate-y-1/2 font-extrabold text-[50px] mb:text-[80px] xxsma:text-[100px] xsma:text-[130px] sma:text-[150px] smed:text-[180px] break-all font-outline-2 text-black opacity-40'>THIRD GAME</h1>
+      <h1 className='absolute bottom-1/2 -translate-y-1/2 font-extrabold text-[50px] mb:text-[80px] xxsma:text-[100px] xsma:text-[130px] sma:text-[150px] smed:text-[180px] break-all text-white opacity-40 font-outline'>THIRD GAME</h1>
     </div>
 
   )

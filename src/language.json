@@ -1,0 +1,25 @@
+{
+    "tr": [
+        {
+            "nav1": "Oyunlar",
+            "nav2": "Hakkımızda",
+            "connectWallet": "Cüzdana Bağlan",
+            "homeButton": "ŞİMDİ OYNA",
+            "gamesButton": "OYNA",
+            "gamesView": "Hepsini Gör",
+            "gamesClose": "Kapat"
+        }
+    ],
+
+    "en": [
+        {
+            "nav1": "Games",
+            "nav2": "About",
+            "connectWallet": "Connect to Wallet",
+            "homeButton": "PLAY NOW",
+            "gamesButton": "PLAY",
+            "gamesView": "View All",
+            "gamesClose": "Close"
+        }
+    ] 
+}

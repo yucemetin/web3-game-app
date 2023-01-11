@@ -1,10 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { NavLink } from "react-router-dom"
 import ReactFlagsSelect from "react-flags-select";
-import { useTranslation } from 'react-i18next'
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { setCurrentLanguage } from '../redux/language'
+import { setMenu } from '../redux/burgermodal'
 import gsap from 'gsap';
+import languages from "../language.json"
+import Menu from './Menu';
+import { setTheme } from '../redux/theme'
 
 export default function Navbar() {
 
@@ -12,31 +15,27 @@ export default function Navbar() {
     const unActiveClassName = `text-[#C2C5CE] font-bold text-xl hover:text-white transition-colors duration-700`
     const activeClassName = "text-white font-bold text-xl border-b border-white transition-colors duration-700"
 
+    const { currentLanguage } = useSelector(state => state.animation)
+    const { theme } = useSelector(state => state.theme)
 
     const dispatch = useDispatch()
 
-    const { t } = useTranslation();
-
     const timeline = gsap.timeline({
         repeat: false,
-        defaults: { duration: 2, ease: "easeInOut" }
+        defaults: { duration: 1, ease: "easeInOut" }
     })
 
     const r2 = useRef()
 
     useEffect(() => {
-
         timeline.from(r2.current, { y: "-100%", }).to(r2.current, { y: "0%" })
         // eslint-disable-next-line
     }, [])
 
     const handleChange = code => {
-        dispatch(setCurrentLanguage(code.toLowerCase()))
 
         const lang = code.toLowerCase() === 'us' ? 'en' : 'tr'
-
-        let loc = "http://localhost:3005/";
-        window.location.replace(loc + "?lng=" + lang);
+        dispatch(setCurrentLanguage(lang))
     }
 
     window.onscroll = function (e) {
@@ -47,42 +46,64 @@ export default function Navbar() {
         }
     }
 
+    const menuHandle = () => {
+        dispatch(setMenu(true))
+    }
+
+    const themeHandle = () => {
+        dispatch(setTheme(!theme))
+    }
+
 
     return (
-        <nav ref={r2} className={sticky === true ? 'fixed top-0 z-50 w-full bg-black bg-opacity-90 transition-colors duration-700' : `fixed top-0 z-50  w-full transition-colors duration-700`}>
-            <ul className='flex justify-between px-8 py-4 gap-x-32 items-center'>
+        <nav ref={r2} className={sticky === true ? `fixed top-0 z-50 w-full border-b-[0.5px] border-white/40 ${theme ? 'bg-gradient-to-r from-[#D325C7] to-[#330be4]' : 'bg-black'}  transition-all duration-700` : `fixed top-0 z-50 w-full ${theme ? 'bg-transparent' : 'bg-black'}  transition-all duration-700`}>
+            <ul className='flex justify-between px-8 py-4 gap-x-16 sma:gap-x-24 xmed:gap-x-32 items-center'>
                 <li>
                     <NavLink to="/">
-                        <p className={`logo-white text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-[#ff00ed] hover:scale-[1.06] transition-all duration-300`}>Thirdgame</p>
+                        <p className={`logo-white text-3xl sma:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-[#ff00ed] hover:scale-[1.06] transition-all duration-300`}>Thirdgame</p>
                     </NavLink>
                 </li>
-                <li>
+                <li className="hidden xsma:block">
                     <nav>
                         <ul className='flex gap-x-20'>
-                            <li className='transition-all duration-300'>
+                            <li className='transition-all duration-300 text-base sma:text-xl'>
                                 <NavLink to="/games" className={({ isActive }) =>
                                     isActive ? activeClassName : unActiveClassName
                                 }>
-                                    {t('nav1')}
+                                    {languages[currentLanguage][0].nav1}
                                 </NavLink>
                             </li>
-                            <li className='transition-all duration-300'>
+                            <li className='transition-all duration-300 text-base sma:text-xl'>
                                 <NavLink to="/about" className={({ isActive }) =>
                                     isActive ? activeClassName : unActiveClassName
                                 }>
-                                    {t('nav2')}
+                                    {languages[currentLanguage][0].nav2}
                                 </NavLink>
                             </li>
                         </ul>
                     </nav>
                 </li>
-                <li>
+                <li className="hidden xsma:inline-block">
                     <nav>
                         <ul className='flex items-center gap-x-10'>
+                            <li className="flex justify-center items-center gap-x-1">
+                                {theme && (
+                                    <div className="w-10 h-10">
+                                        <button onClick={themeHandle} className="w-full h-full"><img src="/sun.svg" alt="" /></button>
+                                    </div>
+                                )}
+
+                                {!theme && (
+                                    <div className="w-10 h-10">
+                                        <button onClick={themeHandle} className="w-full h-full"><img src="/moon.svg" alt="" /></button>
+                                    </div>
+                                )}
+
+                            </li>
                             <li>
                                 <ReactFlagsSelect
                                     countries={["US", "TR"]}
-                                    selected={localStorage?.getItem("lang")?.toUpperCase() ?? 'TR'}
+                                    selected={localStorage?.getItem("lang")?.toUpperCase() === 'EN' ? 'US' : localStorage?.getItem("lang")?.toUpperCase() ?? 'US'}
                                     customLabels={{ US: "EN", TR: "TR" }}
                                     onSelect={code => handleChange(code)}
                                     className="border-none"
@@ -91,15 +112,18 @@ export default function Navbar() {
                             <li>
                                 <NavLink to="/user">
                                     <div className="p-1 rounded-2xl bg-gradient-to-r from-[#330be4] to-[#D325C7] group border-[0.5px] border-white border-opacity-0 hover:border-opacity-100">
-                                        <button className={` ${sticky ? 'bg-white text-[#D325C7] group-hover:text-white' : 'text-white bg-black'} font-bold  px-6 py-3 rounded-xl  group-hover:bg-transparent transition-colors duration-300`}>{t('connect')}</button>
+                                        <button className={`text-white whitespace-nowrap bg-black text-xs xsma:text-sm sma:text-base font-bold px-4 xmed:px-6 py-3 rounded-xl group-hover:bg-transparent transition-colors duration-300`}>{languages[currentLanguage][0].connectWallet}</button>
                                     </div>
                                 </NavLink>
                             </li>
                         </ul>
                     </nav>
                 </li>
+                <li className="xsma:hidden flex items-center">
+                    <button onClick={menuHandle} ><img className="w-[36px] h-[36px]" src="/menu.svg" alt="" /></button>
+                </li>
             </ul>
+            <Menu />
         </nav>
-
     )
 }
