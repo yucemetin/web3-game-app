@@ -4,10 +4,19 @@ import Board from '../components/Board'
 import LoseModal from '../components/LoseModal'
 import WinModal from '../components/WinModal'
 import DrawModal from '../components/DrawModal'
+import { ethers } from "ethers"
+import Lock from "../artifacts/contracts/Lock.sol/Lock.json"
+import BackdropLoading from '../components/BackdropLoading'
+import { setBackdrop } from '../redux/tictactoeGame'
+import { useDispatch } from "react-redux"
 
 const socket = io.connect("http://localhost:9004")
+const contractAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
 
-export default function TicTacToe() {
+function TicTacToe() {
+
+    const dispatch = useDispatch()
+
     const [board, setBoard] = useState(Array(9).fill(""))
     const [disable, setDisable] = useState(false)
     const [mark, setMark] = useState("x")
@@ -24,17 +33,23 @@ export default function TicTacToe() {
         [0, 4, 8],
         [2, 4, 6]
     ]
-    /*
-    useEffect(()=> {
-        socket.on("onlines",function(message){
-            console.log(message)
-            console.log(socket.id)
-            if(message[1] === socket.id) {
-                console.log("aa")
+
+    useEffect(() => {
+
+        socket.on("onlines", function (message) {
+            if (message.length !== 2) {
+                dispatch(setBackdrop(true))
+            } else {
+                dispatch(setBackdrop(false))
             }
+
+            console.log(message.length)
+
+
         })
-    },[])
-*/
+
+        // eslint-disable-next-line
+    }, [])
 
     useEffect(() => {
 
@@ -86,7 +101,7 @@ export default function TicTacToe() {
         socket.emit("send", { updateBoard, id, disable, mark, winner })
 
         setDisable(!disable)
-        
+
         if (winner === mark) {
             setWin(true)
         }
@@ -112,6 +127,11 @@ export default function TicTacToe() {
                 <DrawModal />
             )}
 
+            <BackdropLoading />
+
         </div>
     )
 }
+
+
+export default React.memo(TicTacToe)

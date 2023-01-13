@@ -1,19 +1,36 @@
-import React, { useEffect } from 'react'
-import { useNavigate } from "react-router-dom";
+import React from 'react'
 import languages from "../language.json"
-import { useSelector } from "react-redux"
+import { useSelector ,useDispatch} from "react-redux"
+import MetamaskNotFound from "../components/MetamaskNotFound"
+import WalletNotFound from "../components/ConnectWallet"
+import { setModal } from '../redux/tictactoeGame'
+import { setWalletModal } from '../redux/tictactoeGame'
+import { setSettingModal } from '../redux/tictactoeGame'
+import GameSetting from '../components/GameSetting';
 
 export default function Games() {
 
-  const navigate = useNavigate();
-
   const { currentLanguage } = useSelector(state => state.animation)
+  const { account } = useSelector(state => state.game)
 
-  useEffect(() => {
+  const dispatch = useDispatch()
 
+  const playHandle = () => {
+    const { ethereum } = window
 
-    // eslint-disable-next-line
-  }, [window.innerWidth])
+    if (!ethereum) {
+      dispatch(setModal(true))
+      return
+    }
+
+    if(account === '') {
+      dispatch(setWalletModal(true))
+      return
+    }
+    
+    dispatch(setSettingModal(true))
+
+  }
 
   return (
     <div className='relative w-full h-full'>
@@ -23,7 +40,7 @@ export default function Games() {
         <div className='flex flex-col items-center border-2 gap-y-4 max-h-[400px] games transition-all duration-500'>
           <img src="/vader.jpg" alt="" className="object-cover w-full h-3/5 transition-all duration-500" />
           <h1 className='font-extrabold text-2xl text-white'>GAME 1</h1>
-          <button onClick={() => navigate("/tic-tac-toe")} className='border-[0.5px] border-white font-bold text-white text-xl px-12 py-2 rounded-2xl bg-gradient-to-r from-[#2E67DC] to-[#D325C7] hover:border-none hover:scale-[1.1] transition-all duration-600'>{languages[currentLanguage][0].gamesButton}</button>
+          <button onClick={playHandle} className='border-[0.5px] border-white font-bold text-white text-xl px-12 py-2 rounded-2xl bg-gradient-to-r from-[#2E67DC] to-[#D325C7] hover:border-none hover:scale-[1.1] transition-all duration-600'>{languages[currentLanguage][0].gamesButton}</button>
         </div>
         <div className='relative flex flex-col items-center border-2 gap-y-4 max-h-[400px] games transition-all duration-500'>
           <img src="/monkey.webp" alt="" className=" object-cover w-full h-3/5 transition-all duration-500 " />
@@ -50,6 +67,9 @@ export default function Games() {
           <button disabled className='disabled:opacity-50 border-[0.5px] border-white font-bold text-white text-xl px-12 py-2 rounded-2xl bg-gradient-to-r from-[#2E67DC] to-[#D325C7] hover:border-none hover:scale-[1.1] transition-all duration-600'>{languages[currentLanguage][0].gamesButton}</button>
         </div>
       </div>
+      <MetamaskNotFound/>
+      <WalletNotFound/>
+      <GameSetting/>
     </div >
   )
 }

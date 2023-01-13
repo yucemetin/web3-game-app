@@ -8,6 +8,8 @@ import gsap from 'gsap';
 import languages from "../language.json"
 import Menu from './Menu';
 import { setTheme } from '../redux/theme'
+import { setAccount } from '../redux/tictactoeGame'
+
 
 export default function Navbar() {
 
@@ -17,6 +19,7 @@ export default function Navbar() {
 
     const { currentLanguage } = useSelector(state => state.animation)
     const { theme } = useSelector(state => state.theme)
+    const { account } = useSelector(state => state.game)
 
     const dispatch = useDispatch()
 
@@ -54,9 +57,15 @@ export default function Navbar() {
         dispatch(setTheme(!theme))
     }
 
+    const connectAccount = async () => {
+        const { ethereum } = window
+
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+        dispatch(setAccount(accounts[0]))
+    }
 
     return (
-        <nav ref={r2} className={sticky === true ? `fixed top-0 z-50 w-full border-b-[0.5px] border-white/40 ${theme ? 'bg-gradient-to-r from-[#D325C7] to-[#330be4]' : 'bg-black'}  transition-all duration-700` : `fixed top-0 z-50 w-full ${theme ? 'bg-transparent' : 'bg-black'}  transition-all duration-700`}>
+        <nav ref={r2} className={sticky === true ? `fixed top-0 z-50 w-full border-b-[0.5px] border-white/40 ${theme ? 'bg-gradient-to-r from-[#D325C7] to-[#330be4]' : 'bg-black'}  transition-all duration-700` : `fixed top-0 z-50 w-full bg-transparent transition-all duration-700`}>
             <ul className='flex justify-between px-8 py-4 gap-x-16 sma:gap-x-24 xmed:gap-x-32 items-center'>
                 <li>
                     <NavLink to="/">
@@ -110,11 +119,23 @@ export default function Navbar() {
                                 />
                             </li>
                             <li>
-                                <NavLink to="/user">
+                                {account !== '' && (
+                                    <NavLink to="/user">
+                                        <button>
+                                            <div className="p-1 rounded-2xl bg-gradient-to-r from-[#330be4] to-[#D325C7] group border-[0.5px] border-white border-opacity-0 hover:border-opacity-100">
+                                                <p className={`text-white whitespace-nowrap bg-black text-xs xsma:text-sm sma:text-base font-bold px-4 xmed:px-6 py-3 rounded-xl group-hover:bg-transparent transition-colors duration-300`}>{account.replace(account.substring(6, 38), '...')}</p>
+                                            </div>
+                                        </button>
+                                    </NavLink>
+
+                                )}
+
+                                {account === '' && (
                                     <div className="p-1 rounded-2xl bg-gradient-to-r from-[#330be4] to-[#D325C7] group border-[0.5px] border-white border-opacity-0 hover:border-opacity-100">
-                                        <button className={`text-white whitespace-nowrap bg-black text-xs xsma:text-sm sma:text-base font-bold px-4 xmed:px-6 py-3 rounded-xl group-hover:bg-transparent transition-colors duration-300`}>{languages[currentLanguage][0].connectWallet}</button>
+                                        <button onClick={connectAccount} className={`text-white whitespace-nowrap bg-black text-xs xsma:text-sm sma:text-base font-bold px-4 xmed:px-6 py-3 rounded-xl group-hover:bg-transparent transition-colors duration-300`}>{languages[currentLanguage][0].connectWallet}</button>
                                     </div>
-                                </NavLink>
+                                )}
+
                             </li>
                         </ul>
                     </nav>

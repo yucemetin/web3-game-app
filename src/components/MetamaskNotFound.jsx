@@ -1,29 +1,22 @@
-import React, { useState, Fragment } from 'react'
+import React, { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { setModal } from '../redux/tictactoeGame'
 
-export default function DrawModal() {
-    const [isOpen, setIsOpen] = useState(true)
-    const navigate = useNavigate()
+export default function MetamaskNotFound() {
 
+    const { metamaskModal } = useSelector(state => state.game)
     const { theme } = useSelector(state => state.theme)
 
+    const dispatch = useDispatch()
+
     function closeModal() {
-        setIsOpen(false)
+        dispatch(setModal(false))
     }
 
-    const playHandle = () => {
-        setIsOpen(false)
-    }
-
-    const mainHandle = () => {
-        setIsOpen(false)
-        navigate("/games")
-    }
     return (
         <>
-            <Transition appear show={isOpen} as={Fragment}>
+            <Transition appear show={metamaskModal} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={closeModal}>
                     <Transition.Child
                         as={Fragment}
@@ -53,28 +46,21 @@ export default function DrawModal() {
                                         as="h3"
                                         className={`text-lg font-medium leading-6 ${theme ? 'text-gray-900' : 'text-white'} `}
                                     >
-                                        It's Draw
+                                        Metamask Not Found
                                     </Dialog.Title>
                                     <div className="mt-2">
-                                    <p className={`text-sm ${theme ? 'text-gray-500' : 'text-gray-300'} `}>
-                                            How about another game?
+                                        <p className={`text-sm ${theme ? 'text-gray-500' : 'text-gray-300'} `}>
+                                            Please visit <a target="_blank" href='https://metamask.io/download' className='text-purple-500'> Metamask</a> for download Metamask
                                         </p>
                                     </div>
 
                                     <div className="mt-4 flex justify-between items-center">
                                         <button
                                             type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-green-200 px-4 py-2 text-sm font-medium text-green-800 hover:bg-green-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                            onClick={playHandle}
-                                        >
-                                            Play again
-                                        </button>
-                                        <button
-                                            type="button"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-red-200 px-4 py-2 text-sm font-medium text-red-800 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                            onClick={mainHandle}
+                                            onClick={closeModal}
                                         >
-                                            Main menu
+                                            Close
                                         </button>
                                     </div>
                                 </Dialog.Panel>

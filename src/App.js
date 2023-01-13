@@ -14,7 +14,6 @@ function App() {
 
   const { theme } = useSelector(state => state.theme)
 
-
   useEffect(() => {
     
     const body = document.querySelector("body")
@@ -48,7 +47,7 @@ function App() {
   }, [theme])
 
   useEffect(() => {
-    
+
     const body = document.querySelector("body")
     const html = document.querySelector("html")
     const root = document.querySelector("#root")
@@ -98,14 +97,15 @@ function App() {
   );
 }
 
-//! oyun sırasını belirle
-//! RESPONSIVE
-//! TASARIMDA UFAK DEĞİŞİKLİKLER
-//! OYUNUN LOGİC KISMI
-//! UFAK TEFEK MESELELER
+
+//! modallerin light temasını güzelleştir
+//! about ve modalları translate et
+//! home play tuşunu aktive et
 //! KONTRATI BAĞLAMA
+//! user sayfasını yap ve logları tut
+//! oyun sırasını belirle -- backdrop ayarlar (aynı)
 //! TAŞ KAĞIT MAKAS
 //! NOTFOUND
-//! CÜZDAN BAĞLANMADAN OYUNA GİREMEME
+//! kontratta berabere kalınırsa fonksiyonunu yaz
 
 export default App;
