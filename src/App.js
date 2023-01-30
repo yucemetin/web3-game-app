@@ -2,12 +2,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home"
 import Games from "./pages/Games"
-import User from "./pages/User"
 import About from "./pages/About"
 import TicTacToe from "./pages/TicTacToe";
 import NotFound from "./pages/NotFound";
 import { useSelector } from "react-redux"
 import { useEffect } from "react";
+import RockPaperScissors from "./pages/RockPaperScissors";
 
 
 function App() {
@@ -78,8 +78,6 @@ function App() {
   }, [])
 
 
-
-
   return (
     <BrowserRouter >
       <Navbar />
@@ -87,9 +85,9 @@ function App() {
         <Routes>
           <Route exact path='/' element={<Home />} />
           <Route exact path='/games' element={<Games />} />
-          <Route exact path='/user' element={<User />} />
-          <Route exact path='/about' element={<About />} />
+          <Route exact path='/faq' element={<About />} />
           <Route exact path='/tic-tac-toe' element={<TicTacToe />} />
+          <Route exact path='/rock-paper-scissors' element={<RockPaperScissors />} />
           <Route exact path='/*' element={<NotFound />} />
         </Routes>
       </main>
@@ -98,14 +96,8 @@ function App() {
 }
 
 
-//! modallerin light temasını güzelleştir
-//! about ve modalları translate et
-//! home play tuşunu aktive et
-//! KONTRATI BAĞLAMA
-//! user sayfasını yap ve logları tut
-//! oyun sırasını belirle -- backdrop ayarlar (aynı)
+//! user sayfasını yap ve logları tut !
 //! TAŞ KAĞIT MAKAS
 //! NOTFOUND
-//! kontratta berabere kalınırsa fonksiyonunu yaz
 
 export default App;

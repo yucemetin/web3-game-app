@@ -1,13 +1,19 @@
 import React, { useState, Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { setSettingModal } from '../redux/tictactoeGame'
+import { setBoard } from '../redux/tictactoeGame'
+import languages from "../language.json"
 
 export default function DrawModal() {
     const [isOpen, setIsOpen] = useState(true)
     const navigate = useNavigate()
 
     const { theme } = useSelector(state => state.theme)
+    const { currentLanguage } = useSelector(state => state.animation)
+
+    const dispatch = useDispatch()
 
     function closeModal() {
         setIsOpen(false)
@@ -15,6 +21,8 @@ export default function DrawModal() {
 
     const playHandle = () => {
         setIsOpen(false)
+        dispatch(setSettingModal(true))
+        dispatch(setBoard(Array(9).fill("")))
     }
 
     const mainHandle = () => {
@@ -48,16 +56,16 @@ export default function DrawModal() {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className={`w-full max-w-md transform overflow-hidden rounded-2xl ${theme ? 'bg-white' : 'bg-gray-800'} p-6 text-left align-middle shadow-xl transition-all`}>
+                                <Dialog.Panel className={`w-full max-w-md transform overflow-hidden rounded-2xl ${theme ? 'bg-gradient-to-r from-[#2E67DC]/80 to-[#D325C7]/80' : 'bg-gray-800'} p-6 text-center align-middle shadow-xl transition-all`}>
                                     <Dialog.Title
                                         as="h3"
-                                        className={`text-lg font-medium leading-6 ${theme ? 'text-gray-900' : 'text-white'} `}
+                                        className={`text-lg font-medium leading-6 ${theme ? 'text-white' : 'text-white'} text-center`}
                                     >
-                                        It's Draw
+                                        {languages[currentLanguage][0].draw}
                                     </Dialog.Title>
                                     <div className="mt-2">
-                                    <p className={`text-sm ${theme ? 'text-gray-500' : 'text-gray-300'} `}>
-                                            How about another game?
+                                        <p className={`text-sm ${theme ? 'text-white/70' : 'text-gray-300'} `}>
+                                            {languages[currentLanguage][0].anothergame}
                                         </p>
                                     </div>
 
@@ -67,14 +75,14 @@ export default function DrawModal() {
                                             className="inline-flex justify-center rounded-md border border-transparent bg-green-200 px-4 py-2 text-sm font-medium text-green-800 hover:bg-green-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                             onClick={playHandle}
                                         >
-                                            Play again
+                                            {languages[currentLanguage][0].playagain}
                                         </button>
                                         <button
                                             type="button"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-red-200 px-4 py-2 text-sm font-medium text-red-800 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                             onClick={mainHandle}
                                         >
-                                            Main menu
+                                            {languages[currentLanguage][0].main}
                                         </button>
                                     </div>
                                 </Dialog.Panel>

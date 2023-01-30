@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"
@@ -7,45 +7,53 @@ import { setSettingModal } from '../redux/tictactoeGame'
 import { RadioGroup } from '@headlessui/react'
 import { ethers } from "ethers"
 import Lock from "../artifacts/contracts/Lock.sol/Lock.json"
+import { setBoard } from '../redux/tictactoeGame'
+import { wait } from '@testing-library/user-event/dist/utils';
+import languages from "../language.json"
+import { setPayTransaction } from '../redux/tictactoeGame'
 
-
-const contractAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"
+const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
 
 
 export default function GameSetting() {
 
 
-
-    const [xx, setXx] = useState()
-
-    async function getPlayer() {
-        const provider = new ethers.providers.Web3Provider(window.ethereum)
-        const contract = new ethers.Contract(contractAddress, Lock.abi, provider)
-
-        const data = await contract.getPlayerCount()
-
-        console.log(data)
-    }
+    let [amount, setAmountt] = useState('0.1')
+    const { payTransaction } = useSelector(state => state.animation)
 
     async function setPlayer() {
+
         const provider = new ethers.providers.Web3Provider(window.ethereum)
         const signer = provider.getSigner()
         const contract = new ethers.Contract(contractAddress, Lock.abi, signer)
 
-        const transaction = await contract.setPlayerCount()
+        const transaction = await contract.betPlayer(account, { value: ethers.utils.parseEther(amount) })
         await transaction.wait()
 
-        setXx(await getPlayer())
+        contract.on("TransactionPay",(arr,event) => {
+            let info = {
+                arr: arr,
+                data: event
+            }
+            let temp = [...info.arr]
+            temp[temp.length -1] = [...temp[temp.length -1], Date.now(), 0]
+            const newTemp = JSON.parse(localStorage.getItem("payTransaction")) === null ? [] : JSON.parse(localStorage.getItem("payTransaction"))
 
+            newTemp.push(temp[temp.length -1])
+                   
+            //info.arr sadece son elemanı al
+            dispatch(setPayTransaction(newTemp))
+        })
     }
-
-
+   
     const navigate = useNavigate()
 
     const { theme } = useSelector(state => state.theme)
     const { settingModal } = useSelector(state => state.game)
+    const { account } = useSelector(state => state.game)
+    const { currentLanguage } = useSelector(state => state.animation)
 
-    let [amount, setAmountt] = useState('0.1')
+
 
     const dispatch = useDispatch()
 
@@ -53,17 +61,23 @@ export default function GameSetting() {
         dispatch(setSettingModal(false))
     }
 
-    const startGame = () => {
-        dispatch(setAmount(amount))
+    const startGame = async () => {
+        try {
+            const transaction = await setPlayer()
+            // eslint-disable-next-line
+            const receipt = await wait(transaction)
+            
+            dispatch(setAmount(amount))
+            dispatch(setBoard(Array(9).fill("")))
+            dispatch(setSettingModal(false))
+            navigate("/tic-tac-toe")
+            
+            
+        } catch (e) {
+            console.log(e.message)
+        }
 
-        navigate("/tic-tac-toe")
-        setPlayer()
     }
-
-    useEffect(()=> {
-        setPlayer()
-        console.log(xx)
-    },[])
 
     return (
         <>
@@ -95,32 +109,31 @@ export default function GameSetting() {
                                 <Dialog.Panel className={`w-full max-w-2xl transform overflow-hidden rounded-2xl ${theme ? 'bg-white' : 'bg-gray-800'} p-6 text-left align-middle shadow-xl transition-all`}>
                                     <Dialog.Title
                                         as="h3"
-                                        className={`text-lg font-medium leading-6 ${theme ? 'text-gray-900' : 'text-white'} `}
+                                        className={`text-lg font-medium leading-6 ${theme ? 'text-gray-900' : 'text-white'} text-center`}
                                     >
-                                        Game Settings
+                                        {languages[currentLanguage][0].setting}
                                     </Dialog.Title>
-                                    <div className="my-10 flex gap-x-4">
-                                        <input readOnly value={amount} className='outline-0 px-2 w-[8%] rounded-lg border-2 border-pink-500' type="text" />
+                                    <div className="my-10 flex gap-x-4 justify-center items-center">
 
                                         <RadioGroup className={'flex gap-x-4'} value={amount} onChange={setAmountt}>
                                             <RadioGroup.Option value="0.1">
                                                 {({ checked }) => (
-                                                    <button className={` border-2 ${checked ? 'bg-green-400 border-green-400 text-violet-500' : 'border-white text-white'}  rounded-lg flex items-center justify-center p-2`} >0.1 <img className='w-5 h-5' src="/ethereum.svg" alt="" /></button>
+                                                    <button className={` border-2 ${checked ? `bg-green-400 border-green-400 ${theme ? 'text-white' : 'text-violet-500'}` : `${theme ? ' border-violet-500 text-violet-500' : 'border-white text-white'}`}  rounded-lg flex items-center justify-center p-2`} >0.1 <img className='w-5 h-5' src="/ethereum.svg" alt="" /></button>
                                                 )}
                                             </RadioGroup.Option>
                                             <RadioGroup.Option value="0.2">
                                                 {({ checked }) => (
-                                                    <button className={` border-2 ${checked ? 'bg-green-400 border-green-400 text-violet-500' : 'border-white text-white'}  rounded-lg flex items-center justify-center p-2`} >0.2 <img className='w-5 h-5' src="/ethereum.svg" alt="" /></button>
+                                                    <button className={` border-2 ${checked ? `bg-green-400 border-green-400 ${theme ? 'text-white' : 'text-violet-500'}` : `${theme ? ' border-violet-500 text-violet-500' : 'border-white text-white'}`}  rounded-lg flex items-center justify-center p-2`} >0.2 <img className='w-5 h-5' src="/ethereum.svg" alt="" /></button>
                                                 )}
                                             </RadioGroup.Option>
                                             <RadioGroup.Option value="0.5">
                                                 {({ checked }) => (
-                                                    <button className={` border-2 ${checked ? 'bg-green-400 border-green-400 text-violet-500' : 'border-white text-white'}  rounded-lg flex items-center justify-center p-2`} >0.5 <img className='w-5 h-5' src="/ethereum.svg" alt="" /></button>
+                                                    <button className={` border-2 ${checked ? `bg-green-400 border-green-400 ${theme ? 'text-white' : 'text-violet-500'}` : `${theme ? ' border-violet-500 text-violet-500' : 'border-white text-white'}`}  rounded-lg flex items-center justify-center p-2`} >0.5 <img className='w-5 h-5' src="/ethereum.svg" alt="" /></button>
                                                 )}
                                             </RadioGroup.Option>
                                             <RadioGroup.Option value="1.0">
                                                 {({ checked }) => (
-                                                    <button className={` border-2 ${checked ? 'bg-green-400 border-green-400 text-violet-500' : 'border-white text-white'}  rounded-lg flex items-center justify-center p-2`} >1.0 <img className='w-5 h-5' src="/ethereum.svg" alt="" /></button>
+                                                    <button className={` border-2 ${checked ? `bg-green-400 border-green-400 ${theme ? 'text-white' : 'text-violet-500'}` : `${theme ? ' border-violet-500 text-violet-500' : 'border-white text-white'}`}  rounded-lg flex items-center justify-center p-2`} >1.0 <img className='w-5 h-5' src="/ethereum.svg" alt="" /></button>
                                                 )}
                                             </RadioGroup.Option>
                                         </RadioGroup>
@@ -131,7 +144,7 @@ export default function GameSetting() {
                                             className="inline-flex justify-center rounded-md border border-transparent bg-green-200 px-4 py-2 text-sm font-medium text-green-800 hover:bg-green-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                             onClick={startGame}
                                         >
-                                            Play
+                                            {languages[currentLanguage][0].play}
                                         </button>
                                     </div>
                                 </Dialog.Panel>

@@ -1,48 +1,64 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.7;
 
+import "@openzeppelin/contracts/utils/Strings.sol";
+
+
 contract Lock {
     address payable public winner;
-    address payable public player1;
-    address payable public player2;
-    uint256 public playerCount = 0;
+    uint256 amount;
+    TransactionPaying[] public payArray;
+    TransactionPrizing[] public prizeArray;
+
+    struct TransactionPaying {
+        address player;
+        uint256 payAmount;
+    }
+
+    struct TransactionPrizing {
+        address player;
+        uint256 payAmount;
+    }
 
     mapping(address => uint) public userWallet;
+
+    event TransactionPay(TransactionPaying[] arr);
+    event TransactionPrize(TransactionPrizing[] arr);
+
+    function getBalance(address _player) public view returns (uint256) {
+        return userWallet[_player];
+    }
     
+    function betPlayer(address payable _player) payable public {
+        userWallet[_player] += msg.value;
+        amount = msg.value;
+        payArray.push(TransactionPaying(_player,msg.value));
 
-
-    function setPlayerCount() public {
-        playerCount += 1;
-    }
-
-    function getPlayerCount() public view returns(uint256) {
-        return playerCount;
-    }
-
-    function betPlayer1(address payable _player1) payable public {
-        player1 = _player1;
-
-        userWallet[player1] += msg.value;
-    }
-
-    function betPlayer2(address payable _player2) payable public {
-        player2 = _player2;
-
-        userWallet[player2] += msg.value;
+        emit TransactionPay(payArray);
     }
 
     function revealWinner(address payable _winner) public {
         winner = _winner;
     }
 
-    function collect() public {
-        
-        (bool sent,) = payable(winner).call{value: userWallet[player1] + userWallet[player2]}("");
+    function draw(address payable _player) public {
+        (bool sent,) = payable(_player).call{value: userWallet[_player] }(""); 
+
         if(sent) {
-            userWallet[winner] += userWallet[winner == player1 ? player1 : player2];
-            userWallet[winner == player1 ? player2 : player1] -= userWallet[winner == player1 ? player2 : player1];
-
+            prizeArray.push(TransactionPrizing(_player,userWallet[_player]));
+            emit TransactionPrize(prizeArray);
+            userWallet[_player] = 0;
         }
+    }
 
+    function collect(address payable _player1, address payable _player2) public {
+        
+        (bool sent,) = payable(winner).call{value: (userWallet[_player1] + userWallet[_player2])}("");
+        if(sent) {
+            prizeArray.push(TransactionPrizing(winner,(userWallet[_player1] + userWallet[_player2])));
+            emit TransactionPrize(prizeArray);
+            userWallet[_player1] = 0;
+            userWallet[_player2] = 0;
+        }
     }
 }

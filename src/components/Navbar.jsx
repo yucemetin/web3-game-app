@@ -83,7 +83,7 @@ export default function Navbar() {
                                 </NavLink>
                             </li>
                             <li className='transition-all duration-300 text-base sma:text-xl'>
-                                <NavLink to="/about" className={({ isActive }) =>
+                                <NavLink to="/faq" className={({ isActive }) =>
                                     isActive ? activeClassName : unActiveClassName
                                 }>
                                     {languages[currentLanguage][0].nav2}
@@ -120,16 +120,13 @@ export default function Navbar() {
                             </li>
                             <li>
                                 {account !== '' && (
-                                    <NavLink to="/user">
-                                        <button>
-                                            <div className="p-1 rounded-2xl bg-gradient-to-r from-[#330be4] to-[#D325C7] group border-[0.5px] border-white border-opacity-0 hover:border-opacity-100">
-                                                <p className={`text-white whitespace-nowrap bg-black text-xs xsma:text-sm sma:text-base font-bold px-4 xmed:px-6 py-3 rounded-xl group-hover:bg-transparent transition-colors duration-300`}>{account.replace(account.substring(6, 38), '...')}</p>
-                                            </div>
-                                        </button>
-                                    </NavLink>
+                                    <button>
+                                        <div className="p-1 rounded-2xl bg-gradient-to-r from-[#330be4] to-[#D325C7] group border-[0.5px] border-white border-opacity-0 hover:border-opacity-100">
+                                            <p className={`text-white whitespace-nowrap bg-black text-xs xsma:text-sm sma:text-base font-bold px-4 xmed:px-6 py-3 rounded-xl group-hover:bg-transparent transition-colors duration-300`}>{account.replace(account.substring(6, 38), '...')}</p>
+                                        </div>
+                                    </button>
 
                                 )}
-
                                 {account === '' && (
                                     <div className="p-1 rounded-2xl bg-gradient-to-r from-[#330be4] to-[#D325C7] group border-[0.5px] border-white border-opacity-0 hover:border-opacity-100">
                                         <button onClick={connectAccount} className={`text-white whitespace-nowrap bg-black text-xs xsma:text-sm sma:text-base font-bold px-4 xmed:px-6 py-3 rounded-xl group-hover:bg-transparent transition-colors duration-300`}>{languages[currentLanguage][0].connectWallet}</button>

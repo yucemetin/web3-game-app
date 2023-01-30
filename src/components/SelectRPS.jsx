@@ -1,24 +1,25 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { useSelector, useDispatch } from "react-redux"
-import { setModal } from '../redux/tictactoeGame'
+import { setRpsModal } from '../redux/tictactoeGame'
+import { setRpsChoose } from '../redux/tictactoeGame'
 import languages from "../language.json"
 
-export default function MetamaskNotFound() {
+export default function SelectRPS() {
 
-    const { metamaskModal } = useSelector(state => state.game)
     const { theme } = useSelector(state => state.theme)
     const { currentLanguage } = useSelector(state => state.animation)
+    const { rpsmodal } = useSelector(state => state.game)
 
     const dispatch = useDispatch()
 
     function closeModal() {
-        dispatch(setModal(false))
+        dispatch(setRpsModal(false))
     }
 
     return (
         <>
-            <Transition appear show={metamaskModal} as={Fragment}>
+            <Transition appear show={rpsmodal} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={closeModal}>
                     <Transition.Child
                         as={Fragment}
@@ -43,29 +44,17 @@ export default function MetamaskNotFound() {
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className={`w-full max-w-md transform overflow-hidden rounded-2xl ${theme ? 'bg-gradient-to-r from-[#2E67DC]/80 to-[#D325C7]/80' : 'bg-gray-800'} p-6 text-center align-middle shadow-xl transition-all`}>
+                                <Dialog.Panel className={`w-full flex flex-col gap-y-10 max-w-3xl transform overflow-hidden rounded-2xl ${theme ? 'bg-gradient-to-r from-[#2E67DC]/80 to-[#D325C7]/80' : 'bg-gray-800'} p-6 text-center align-middle shadow-xl transition-all`}>
                                     <Dialog.Title
                                         as="h3"
                                         className={`text-lg font-medium leading-6 ${theme ? 'text-white' : 'text-white'} `}
                                     >
                                         {languages[currentLanguage][0].metamask}
                                     </Dialog.Title>
-                                    <div className="mt-2">
-                                        <p className={`text-sm ${theme ? 'text-white/70' : 'text-gray-300'} `}>
-                                            {languages[currentLanguage][0].metamask2}
-                                            <a rel="noreferrer" target="_blank" href='https://metamask.io/download' className={`${theme ? 'text-black/70' : 'text-violet-500'}`}>
-                                                Metamask
-                                            </a>
-                                        </p>
-                                    </div>
-                                    <div className="mt-4 flex justify-center items-center">
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-red-200 px-4 py-2 text-sm font-medium text-red-800 hover:bg-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                            onClick={closeModal}
-                                        >
-                                            {languages[currentLanguage][0].close}
-                                        </button>
+                                    <div className="mt-2 flex items-center justify-center gap-x-16 w-full h-full">
+                                        <button onClick={() => dispatch(setRpsChoose("rock"))} className='w-1/3 h-1/2 hover:border rounded-xl px-4 py-4'><img src="/rock.svg" alt="" /></button>
+                                        <button onClick={() => dispatch(setRpsChoose("paper"))} className='w-1/3 h-1/2 hover:border rounded-xl px-4 py-4'><img src="/paper.svg" alt="" /></button>
+                                        <button onClick={() => dispatch(setRpsChoose("scissors"))} className='w-1/3 h-1/2 hover:border rounded-xl px-4 py-4'><img src="/scissors.svg" alt="" /></button>
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

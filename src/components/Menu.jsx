@@ -8,17 +8,19 @@ import { setCurrentLanguage } from '../redux/language'
 import { setTheme } from '../redux/theme'
 import { Switch } from '@headlessui/react'
 import { Us, Tr } from "react-flags-select";
+import { setAccount } from '../redux/tictactoeGame'
 
 export default function Menuu() {
 
-    const unActiveClassName = `hover:border hover:border-white hover:rounded-2xl hover:bg-white/20 text-[#C2C5CE] font-bold text-3xl hover:text-white py-2 px-12 transition-colors duration-700 w-full`
-    const activeClassName = "text-white font-bold text-3xl border border-white rounded-2xl bg-white/20 py-2 px-12 transition-colors duration-700 w-full"
+    const unActiveClassName = `hover:border hover:border-white hover:rounded-2xl hover:bg-white/20 text-[#C2C5CE] font-bold text-3xl hover:text-white py-2 px-12 w-full`
+    const activeClassName = "text-white font-bold text-3xl border border-white rounded-2xl bg-white/20 py-2 px-12 w-full"
 
     const { currentLanguage } = useSelector(state => state.animation)
     const { theme } = useSelector(state => state.theme)
 
     const dispatch = useDispatch()
     const { isOpen } = useSelector(state => state.burgermenu)
+    const { account } = useSelector(state => state.game)
 
     const closeHandle = () => {
         dispatch(setMenu(false))
@@ -37,6 +39,13 @@ export default function Menuu() {
 
     }
 
+    const connectAccount = async () => {
+        const { ethereum } = window
+
+        const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
+        dispatch(setAccount(accounts[0]))
+    }
+
     return (
         <>
             <Offcanvas backdropClassName='bg-black' placement={'end'} show={isOpen} onHide={closeHandle}>
@@ -48,19 +57,19 @@ export default function Menuu() {
                 </Offcanvas.Header>
                 <Offcanvas.Body className={`${theme ? 'bg-gradient-to-r from-[#D325C7]/70 to-[#330be4]/70' : 'bg-black'} transition-all duration-700`}>
                     <nav className='h-full pt-8'>
-                        <ul className='h-full flex flex-col justify-between items-center'>
-                            <li>
-                                <nav className='items-center'>
-                                    <ul className='flex flex-col items-center gap-y-12'>
-                                        <li className='transition-all duration-300 w-full flex items-center justify-center text-center'>
+                        <ul className='h-full flex flex-col justify-between items-center gap-y-4'>
+                            <li className='h-1/2'>
+                                <nav className='items-center h-full'>
+                                    <ul className='flex flex-col items-center gap-y-8 h-full'>
+                                        <li className='transition-all duration-300 w-full flex items-center justify-center text-center h-[15%] '>
                                             <NavLink onClick={closeHandle} to="/games" className={({ isActive }) =>
                                                 isActive ? activeClassName : unActiveClassName
                                             }>
                                                 {languages[currentLanguage][0].nav1}
                                             </NavLink>
                                         </li>
-                                        <li className='transition-all duration-300 flex items-center justify-center text-center'>
-                                            <NavLink onClick={closeHandle} to="/about" className={({ isActive }) =>
+                                        <li className='transition-all duration-300 flex items-center justify-center text-center h-[15%]'>
+                                            <NavLink onClick={closeHandle} to="/faq" className={({ isActive }) =>
                                                 isActive ? activeClassName : unActiveClassName
                                             }>
                                                 {languages[currentLanguage][0].nav2}
@@ -68,6 +77,14 @@ export default function Menuu() {
                                         </li>
                                     </ul>
                                 </nav>
+                            </li>
+                            <li>
+                                {!account && (
+                                    <button onClick={connectAccount} className="rainbow-button px-24 py-2 font-bold text-sm whitespace-nowrap border-2 border-[#D325C7]/40">
+                                        {languages[currentLanguage][0].connectWallet}
+                                    </button>
+                                )}
+
                             </li>
                             <li className='w-full'>
                                 <nav className='w-full'>
